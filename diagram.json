@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "author": "luiz.cazelatto",
+  "editor": "wokwi",
+  "parts": [
+    { "type": "board-esp32-devkit-c-v4", "id": "esp", "top": 0, "left": 0, "attrs": {} },
+    { "type": "wokwi-photoresistor-sensor", "id": "ldr", "top": -110, "left": -250, "attrs": { "lux": "500" } },
+    { "type": "wokwi-resistor", "id": "r1", "top": 140, "left": -150, "attrs": { "value": "220" } },
+    { "type": "wokwi-resistor", "id": "r2", "top": 175, "left": -150, "attrs": { "value": "220" } },
+    { "type": "wokwi-resistor", "id": "r3", "top": 210, "left": -150, "attrs": { "value": "220" } },
+    { "type": "wokwi-led", "id": "led_vermelho", "top": 90, "left": -260, "attrs": { "color": "red" } },
+    { "type": "wokwi-led", "id": "led_amarelo", "top": 90, "left": -220, "attrs": { "color": "yellow" } },
+    { "type": "wokwi-led", "id": "led_verde", "top": 90, "left": -180, "attrs": { "color": "green" } }
+  ],
+  "connections": [
+    [ "esp:TX", "$serialMonitor:RX", "", [] ],
+    [ "esp:RX", "$serialMonitor:TX", "", [] ],
+    [ "ldr:VCC", "esp:3V3", "red", [] ],
+    [ "ldr:GND", "esp:GND.1", "black", [] ],
+    [ "ldr:AO", "esp:34", "orange", [] ],
+    [ "esp:25", "r1:2", "red", [] ],
+    [ "r1:1", "led_vermelho:A", "red", [] ],
+    [ "esp:26", "r2:2", "yellow", [] ],
+    [ "r2:1", "led_amarelo:A", "yellow", [] ],
+    [ "esp:27", "r3:2", "green", [] ],
+    [ "r3:1", "led_verde:A", "green", [] ],
+    [ "led_vermelho:C", "esp:GND.1", "black", [] ],
+    [ "led_amarelo:C", "esp:GND.1", "black", [] ],
+    [ "led_verde:C", "esp:GND.1", "black", [] ]
+  ],
+  "dependencies": {}
+}

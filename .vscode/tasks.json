@@ -1,0 +1,53 @@
+{
+  // Ctrl+Shift+P -> "Tasks: Run Task" e escolha uma das tarefas abaixo.
+  // Usa o arduino-cli já instalado (placa ESP32 Dev Module).
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "ESP32: listar portas",
+      "type": "shell",
+      "command": "arduino-cli board list",
+      "problemMatcher": []
+    },
+    {
+      "label": "ESP32: compilar",
+      "type": "shell",
+      "command": "arduino-cli compile --fqbn esp32:esp32:esp32 ${input:sketch}",
+      "group": { "kind": "build", "isDefault": true },
+      "problemMatcher": []
+    },
+    {
+      "label": "ESP32: gravar",
+      "type": "shell",
+      "command": "arduino-cli compile --upload --fqbn esp32:esp32:esp32 -p ${input:porta} ${input:sketch}",
+      "problemMatcher": []
+    },
+    {
+      "label": "Wokwi: compilar para simulação",
+      "type": "shell",
+      "command": "arduino-cli compile --fqbn esp32:esp32:esp32 --build-property \"compiler.cpp.extra_flags=-DSIMULACAO_WOKWI\" --output-dir semaforo/build semaforo",
+      "problemMatcher": []
+    },
+    {
+      "label": "ESP32: monitor serial",
+      "type": "shell",
+      "command": "arduino-cli monitor -p ${input:porta} -c baudrate=115200",
+      "problemMatcher": []
+    }
+  ],
+  "inputs": [
+    {
+      "id": "sketch",
+      "type": "pickString",
+      "description": "Qual sketch?",
+      "options": ["calibracao_ldr", "semaforo"],
+      "default": "semaforo"
+    },
+    {
+      "id": "porta",
+      "type": "promptString",
+      "description": "Porta do ESP32 (veja em 'ESP32: listar portas')",
+      "default": "COM3"
+    }
+  ]
+}

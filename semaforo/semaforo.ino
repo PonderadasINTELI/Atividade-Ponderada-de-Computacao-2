@@ -13,14 +13,23 @@ const unsigned long T_VERMELHO = 11000; // 5 s + 6
 const unsigned long T_VERDE = 6000;     // 3 s + floor(6 / 2)
 const unsigned long T_AMARELO = 2000;   // 2 s para todos
 
-// ---------- Calibração: PREENCHER com as medições da bancada ----------
-// LEITURA_SOBE_COM_LUZ: true se a lanterna dá leitura MAIOR que a sombra (LDR do lado do 3V3).
+#ifdef SIMULACAO_WOKWI
+// ---------- Só para o simulador Wokwi (NÃO são medições, não vão para o relatório) ----------
+// O módulo LDR do Wokwi tem o LDR do lado do GND: a leitura DESCE com a luz.
+// Pela fórmula do Wokwi: ~50 lux dá leitura ~2500 e ~100 lux dá ~2050.
+const bool LEITURA_SOBE_COM_LUZ = false;
+const int LIMIAR_ENTRADA = 2500; // abaixo de ~50 lux -> modo noturno
+const int LIMIAR_SAIDA = 2000;   // acima de ~100 lux -> modo diurno
+#else
+// ---------- Calibração (bancada, LDR + 47 kΩ, calibracao_ldr/saida-monitor-serial.txt) ----------
+// sombra 0–31 (média 16), ambiente 1129–1338 (média 1228), lanterna 4004–4027 (média 4015).
+// A lanterna dá leitura MAIOR que a sombra: LDR do lado do 3V3.
 const bool LEITURA_SOBE_COM_LUZ = true;
-// Os dois limiares ficam entre a faixa de sombra e a de ambiente, com folga maior que o ruído medido.
-// LIMIAR_ENTRADA fica mais perto da sombra; LIMIAR_SAIDA mais perto do ambiente.
-// Ex. (leitura sobe com a luz): sombra ~800, ambiente ~2000 -> ENTRADA 1100, SAIDA 1500.
-const int LIMIAR_ENTRADA = 0; // a luz cai além dele -> entra no modo noturno
-const int LIMIAR_SAIDA = 0;   // a luz volta além dele -> sai do modo noturno
+// Entrada bem acima do máximo da sombra; saída abaixo do mínimo do ambiente.
+// Folga de 400, ~6x o desvio do ambiente (67,7), cobre o ruído e a subida lenta do LDR.
+const int LIMIAR_ENTRADA = 400; // leitura cai abaixo dele -> entra no modo noturno
+const int LIMIAR_SAIDA = 800;   // leitura sobe acima dele -> sai do modo noturno
+#endif
 
 const unsigned long INTERVALO_LDR = 200;   // lê o LDR a cada 200 ms
 const unsigned long MEIO_PERIODO_PISCA = 500; // amarelo noturno pisca a 1 Hz

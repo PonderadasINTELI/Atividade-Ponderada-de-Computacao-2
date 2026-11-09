@@ -1,0 +1,5 @@
+# Simulação no Wokwi para VS Code. Antes, rode a tarefa "Wokwi: compilar para simulação".
+[wokwi]
+version = 1
+firmware = 'semaforo/build/semaforo.ino.bin'
+elf = 'semaforo/build/semaforo.ino.elf'
